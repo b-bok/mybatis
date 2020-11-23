@@ -60,11 +60,12 @@
         <c:choose>
 			<c:when test="${ empty loginUser }">
 			
-		        <form action="" method="post">
+		        <form action="login.me" method="post">
 		            <table>
 		                <tr>
 		                    <td>아이디</td>
 		                    <td><input type="text" name="userId"></td>
+		                    <!--  버튼 타입 설정 반드시할것 버튼이냐? 제출용이냐? -->
 		                    <td rowspan="2"><button type="submit" style="height: 50px;">로그인</button></td>
 		                </tr>
 		
@@ -98,7 +99,7 @@
 		                </tr>
 		                <tr>
 		                    <td><a href="">마이페이지</a></td>
-		                    <td><a href="login.me">로그아웃</a></td>
+		                    <td><a href="logout.me">로그아웃</a></td>
 		                </tr>
 		            </table>
 		        </div>
@@ -114,12 +115,15 @@
     <div class="nav-area" align="center">
         <div class="menu">HOME</div>
         <div class="menu">공지사항</div>
-        <div class="menu">게시판</div>
+        <div class="menu" onclick="location.href='list.bo?currentPage=1';">게시판</div>
         <div class="menu">ETC</div>
 
     </div>
 	
-
+	
+	
+	
+	
 		
 
 </body>

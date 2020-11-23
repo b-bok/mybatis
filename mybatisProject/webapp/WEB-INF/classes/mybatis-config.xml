@@ -13,6 +13,10 @@
 	<!-- VO 클래스의 풀네임(패키지+클래스)을 단순 클래스명만으로 쓰기 위해 별칭을 등록하는 부분 -->
 	<typeAliases>
 		
+		<typeAlias type="com.kh.mybatis.member.model.vo.Member" alias="Member"/>
+		<typeAlias type="com.kh.mybatis.board.model.vo.Board" alias="Board"/>
+		
+		
 	</typeAliases>
 	
 	<!-- 연결할 DB에 대한 정보를 선언하는 부분 -->
@@ -56,9 +60,10 @@
 	<mappers>
 	
 		<mapper resource="/mappers/member-mapper.xml"/>
+		<mapper resource="/mappers/board-mapper.xml"/>
 
 	</mappers>
-	
+	<!-- 주의사항 : 파일이 없음애도 불구하고, 미리등록하는거 안됨!, 있지만 namespace가 없을 경우도 안됨! -->
 	
 	
 </configuration>

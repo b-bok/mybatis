@@ -30,4 +30,12 @@ public class MemberDao {
 
 	}
 	
+	
+	public Member loginMember(SqlSession sqlSession, Member m) {
+		// selectOne 내부적으로 조회된 결과가 없을 경우 null을 반환하게 정의되어있음
+		
+		return sqlSession.selectOne("memberMapper.loginMember",m);
+	}
+	
+	
 }

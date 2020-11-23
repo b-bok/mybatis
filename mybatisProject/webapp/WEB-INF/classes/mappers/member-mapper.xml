@@ -4,6 +4,38 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
   
 <mapper namespace="memberMapper" >
+	
+	<!-- 
+		* resultMap은 마이바티스의 가장 강력하고 핵심적인 기능 하나
+		ResultSet으로부터 조회된 컬럼값 하나 뽑아서
+		내가 지정한 자바 객체에 필드에 담아주는 JDBC 코드 줄여주는 역할
+		
+		type : ResultSet에 조회된 한 행의 값들을 어떤 vo클래스 객체에 담은건지에 대한 타입
+	 -->
+	
+	<resultMap id="memberResultSet" type="com.kh.mybatis.member.model.vo.Member">
+		
+		<!-- 
+			column : 조회된 결과중 어떤 컬럼 값을 뽑을 건지 (DB 컬럼명)
+			property : 뽑은값 해당 객체의 어떤 필드에 매핑? (자바 객체의 필드명)
+			
+		 -->
+	
+	
+		<result column="user_no" property="userNo"/>
+		<result column="user_id" property="userId"/>
+		<result column="user_pwd" property="userPwd"/>
+		<result column="user_name" property="userName"/>
+		<result column="email" property="email"/>
+		<result column="birthday" property="birthday"/>
+		<result column="gender" property="gender"/>
+		<result column="phone" property="phone"/>
+		<result column="enroll_date" property="enrollDate"/>
+		<result column="modify_date" property="modifyDate"/>
+		<result column="status" property="status"/>
+	</resultMap>
+
+
 
 	<!-- 
 		실행하려는 sql문 종류에 따라 태그 작성후 sql문 기술
@@ -18,7 +50,7 @@
 	 -->
 
 
-	<insert id="insertMember" parameterType="com.kh.mybatis.member.model.vo.Member">
+	<insert id="insertMember" parameterType="Member">
 		
 		insert 
 			  into member
@@ -48,6 +80,45 @@
 				
 	</insert>
 
+	<select id="loginMember"
+			parameterType="Member"
+	 		resultMap="memberResultSet">
+	
+		  SELECT 
+		         USER_NO
+		       , USER_ID
+		       , USER_PWD
+		       , USER_NAME
+		       , EMAIL
+		       , BIRTHDAY
+		       , GENDER
+		       , PHONE
+		       , ADDRESS
+		       , ENROLL_DATE
+		       , MODIFY_DATE
+		       , STATUS
+		  FROM MEMBER
+		  WHERE USER_ID = #{userId}
+		    AND USER_PWD = #{userPwd}
+		    AND STATUS = 'Y'
+			
+			
+	</select>
+	
+	<!-- 
+		* select 태그 같은 경우
+		반드시 기술해야 하는 속성?
+		
+		resultType/resultMap :  해당 select문을 실행한 결과를 반환할 타입
+		 						즉, 조회된 결과(ResultSet)를 자바의 어떤 타입에 매핑해서 반환 할건지 기술
+		 						
+		 				resultType : 주로 바로 매핑 되는것들 (string, _int)
+						resultMap  : 
+	
+	 -->	
 
+	
+	
+	
 
 </mapper>  

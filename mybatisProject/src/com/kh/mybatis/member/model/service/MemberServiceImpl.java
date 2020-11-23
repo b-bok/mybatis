@@ -7,9 +7,11 @@ import static com.kh.mybatis.common.template.Template.getSqlSession;
 import com.kh.mybatis.member.model.dao.MemberDao;
 import com.kh.mybatis.member.model.vo.Member;
 
-
-
 public class MemberServiceImpl implements MemberService {
+	
+	
+	private MemberDao mDao = new MemberDao();
+	
 
 	/**
 	 *회원 가입용 서비스
@@ -25,7 +27,7 @@ public class MemberServiceImpl implements MemberService {
 		// DAO 메소드 호출 (Connection 객체, Controller전달된 값 넘기면서)
 		// => DAO 메소드 호출 (SqlSession 객체, Controller에서 전달된값 넘기면서 )
 		
-		int result = new MemberDao().insertMember(sqlSession, m);
+		int result = mDao.insertMember(sqlSession, m);
 		
 		
 		
@@ -47,8 +49,14 @@ public class MemberServiceImpl implements MemberService {
 	 */
 	@Override
 	public Member loginMember(Member m) {
+
+		SqlSession sqlSession = getSqlSession();
 		
-		return null;
+		Member loginUser = mDao.loginMember(sqlSession, m);
+		
+		sqlSession.close();
+		
+		return loginUser;
 	}
 	
 	
