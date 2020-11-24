@@ -3,6 +3,7 @@ package com.kh.mybatis.board.model.service;
 import java.util.ArrayList;
 
 import com.kh.mybatis.board.model.vo.Board;
+import com.kh.mybatis.board.model.vo.Reply;
 import com.kh.mybatis.common.model.vo.PageInfo;
 
 public interface BoardService {
@@ -13,16 +14,21 @@ public interface BoardService {
 	int selectListCount();
 	
 	ArrayList<Board> selectList(PageInfo pi);
+	
+	
+	// 2. 게시판 검색 요청시
+	int selectSearchCount(String condition, String keyword);
+	
+	ArrayList<Board> selectSearchList(String condition, String keyword, PageInfo pi);
+	
 
-	// 2. 게시판 상세조회 요청시
+	// 3. 게시판 상세조회 요청시
 	int increaseCount(int bno);
 	
-	Board selectDetailBoard();
+	Board selectDetailBoard(int bno);
 	
+	ArrayList<Reply> selectReplyList(int bno);
 	
-	/*
-	 * //3. 게시글 작성시 int insertBoard(Board b);
-	 */
 	
 	
 }

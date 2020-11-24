@@ -1,11 +1,13 @@
 package com.kh.mybatis.board.model.dao;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.session.SqlSession;
 
 import com.kh.mybatis.board.model.vo.Board;
+import com.kh.mybatis.board.model.vo.Reply;
 import com.kh.mybatis.common.model.vo.PageInfo;
 
 public class BoardDao {
@@ -41,6 +43,55 @@ public class BoardDao {
 		return (ArrayList)sqlSession.selectList("boardMapper.selectList", null, rowBounds);
 		
 		
+	}
+
+	public int selectSearchCount(SqlSession sqlSession, String condition, String keyword) {
+		
+		HashMap<String,String> map = new HashMap<>();
+		
+		map.put("condition", condition);
+		map.put("keyword", keyword);
+		
+		
+		return sqlSession.selectOne("boardMapper.selectSearchCount", map);
+		
+		
+	}
+
+	public ArrayList<Board> selectSearchList(SqlSession sqlSession, String condition, String keyword, PageInfo pi) {
+		
+		int offset = (pi.getCurrentPage() -1) * pi.getBoardLimt();
+		
+		HashMap<String, String> map = new HashMap<>();
+		
+		map.put("condition",condition);
+		map.put("keyword",keyword);
+		
+		
+		RowBounds rowBounds = new RowBounds(offset,pi.getBoardLimt());
+		
+		return (ArrayList)sqlSession.selectList("boardMapper.selectSearchList", map, rowBounds);
+		
+		
+	}
+
+	public int increseCount(SqlSession sqlSession, int bno) {
+		
+		
+		return sqlSession.update("boardMapper.increaseCount", bno);
+		
+	}
+
+	public Board selectDetailBoard(SqlSession sqlSession, int bno) {
+		
+		
+		return sqlSession.selectOne("boardMapper.selectDetailBoard", bno);
+		
+	}
+
+	public ArrayList<Reply> selectReplyList(SqlSession sqlSession, int bno) {
+
+		return (ArrayList)sqlSession.selectList("boardMapper.selectReply", bno);
 	}
 	
 

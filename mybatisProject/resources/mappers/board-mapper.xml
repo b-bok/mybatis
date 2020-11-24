@@ -13,9 +13,19 @@
 		<result column="user_id" property="boardWriter"/>
 		<result column="count" property="count"/>
 		<result column="create_date" property="createDate"/>
+		
 	
 	</resultMap>
 	
+	
+	<resultMap id="replyResultSet" type="Reply">
+			
+			<result column="reply_no" property="replyNo"/>
+			<result column="user_id" property="replyWriter"/>
+			<result column="reply_content" property="replyContent"/>
+		    <result column="create_date" property="createDate"/>
+	
+	</resultMap>
 	
 	
 	<select id="selectListCount" resultType="_int">
@@ -27,7 +37,7 @@
 	</select>
 	
 	
-	<select id="selectList" parameterType="Board" resultMap="boardResultSet">
+	<select id="selectList" resultMap="boardResultSet" >
 		  SELECT
 		          BOARD_NO
 		        , BOARD_TITLE
@@ -42,6 +52,107 @@
 	
 	</select>
 	
+	
+	<select id="selectSearchCount" resultType="_int" parameterType="hashmap">
+		
+		SELECT
+		       COUNT(*)
+		  FROM BOARD B
+		  JOIN MEMBER ON(BOARD_WRITER = USER_NO)
+		 WHERE B.STATUS = 'Y'
+		 <if test="condition == 'writer'">
+		   AND USER_ID 
+		 </if>
+		 <if test="condition == 'title'">
+		   AND BOARD_TITLE
+		 </if>
+		 <if test="condition == 'content'">
+		   AND BOARD_CONTENT 
+		 </if>
+		       LIKE '%' || #{keyword} || '%'
+			
+	
+	</select>
+	
+	
+	<select id="selectSearchList" resultMap="boardResultSet" parameterType="hashmap">
+		
+				  SELECT
+		          BOARD_NO
+		        , BOARD_TITLE
+		        , USER_ID
+		        , COUNT
+		        , CREATE_DATE
+		   FROM BOARD B
+		   JOIN MEMBER ON (BOARD_WRITER = USER_NO)
+		   WHERE B.STATUS = 'Y'
+		   
+		   		 <choose>
+		 
+			 	<when test="condition == 'writer'">
+			  		AND USER_ID
+			  	</when>
+			  
+			  	<when test="condition == 'title'">
+			  		AND BOARD_TITLE
+			  	</when>
+			  	
+			  	<otherwise>
+			  		AND BOARD_CONTENT
+			  	</otherwise>
+			  	
+		  		</choose>
+		  
+		      LIKE '%' || #{keyword} || '%'
+		   
+		   ORDER
+		      BY BOARD_NO DESC
 
+	</select>
+	
+	
+	<update id="increaseCount" parameterType="_int">
+		UPDATE
+		       BOARD
+		   SET COUNT = COUNT+1
+		 WHERE BOARD_NO = #{bno}
+		   AND STATUS = 'Y'
+	
+	</update>
+	
+	<select id="selectDetailBoard" parameterType="_int" resultMap="boardResultSet">
+		
+		SELECT
+		       BOARD_NO
+		     , BOARD_TITLE
+		     , BOARD_CONTENT
+		     , USER_ID
+		     , COUNT
+		     , CREATE_DATE
+		FROM BOARD 
+		JOIN MEMBER ON (BOARD_WRITER = USER_NO)
+		WHERE BOARD_NO = #{bno}
+
+	</select>
+	
+	<select id="selectReply" parameterType="_int" resultMap="replyResultSet">
+	
+		SELECT
+		        REPLY_NO
+		      , USER_ID
+		      , REPLY_CONTENT
+		      , to_char(CREATE_DATE, 'YY/MM/DD') create_date
+		 FROM REPLY R
+		 JOIN MEMBER ON (REPLY_WRITER = USER_NO)
+		 WHERE REF_BNO = #{bno}
+		   AND R.STATUS = 'Y'
+		 ORDER
+		    BY REPLY_NO DESC  
+				
+		
+	
+	</select>
+	
+	
 </mapper>  
   
